@@ -1,0 +1,4 @@
+proc proc()
+fd 100
+end
+proc()

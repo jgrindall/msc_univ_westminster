@@ -1,0 +1,6 @@
+make :a 7+8
+make :b 4*3 + 1
+make :c 8*3 - (6/4)/(4-2+1)
+fd :a
+rt :b
+fd :c

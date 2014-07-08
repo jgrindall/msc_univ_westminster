@@ -1,0 +1,6 @@
+proc procA()
+ fd 100
+end
+proc procA()
+ fd 200
+end

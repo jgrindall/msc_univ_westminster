@@ -1,0 +1,4 @@
+proc procA(:n, :m)
+   rpt :n  [fd :m rt :m  make :m :m+1]
+end
+procA(2,5)

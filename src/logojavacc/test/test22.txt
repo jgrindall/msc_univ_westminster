@@ -1,0 +1,4 @@
+procA(7)
+proc procA(:a)
+fd :a
+end

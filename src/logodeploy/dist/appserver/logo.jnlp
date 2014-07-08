@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://www.johngrindall.com/robologo/" href="logo.jnlp">
+  <information>
+    <title>RoboLogo</title>
+	<icon href="robot.jpg"/>	
+	<icon href="legoMindstorms.png" kind="splash"/>
+    <vendor>jgrindall</vendor>
+    <homepage href="http://www.johngrindall.com" />
+    <description>RoboLogo</description>
+    <offline-allowed />
+  </information>
+  <resources>
+    <j2se version="1.4+" />
+    <jar href="logo.jar" />
+	<jar href="lib/logoclasslib.jar" />
+	<jar href="lib/logojavacc.jar" />
+	<jar href="lib/substance.jar" />
+	<jar href="lib/logocomm.jar" />
+	<jar href="lib/trident.jar" />
+  </resources>
+  <security>
+    <all-permissions />
+  </security>
+  <application-desc main-class="com.jgrindall.logo.Main" />
+</jnlp>
+
+	
+	
+

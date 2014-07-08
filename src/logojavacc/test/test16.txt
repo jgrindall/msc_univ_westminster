@@ -1,0 +1,4 @@
+proc procA()
+  proc procA()
+    fd  10
+  end end

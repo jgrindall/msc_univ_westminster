@@ -1,0 +1,4 @@
+proc procB(:a)
+fd :a
+end
+procB()

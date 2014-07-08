@@ -1,0 +1,175 @@
+options {
+   MULTI=true;
+   VISITOR=true;
+   NODE_DEFAULT_VOID=true;
+   NODE_EXTENDS="BaseNode";
+   NODE_PREFIX="";
+   NODE_PACKAGE="com.jgrindall.logojavacc";
+   OUTPUT_DIRECTORY = "C:/Users/John/Documents/NetBeansProjects/logojavacc/src/com/jgrindall/logojavacc";
+   STATIC=false;
+   VISITOR_EXCEPTION="ParseException";
+   TRACK_TOKENS=true;
+}
+
+PARSER_BEGIN(LogoParser)
+package com.jgrindall.logojavacc;
+public class LogoParser {
+    
+}
+PARSER_END(LogoParser)
+
+SKIP : 	{ " " }
+SKIP : 	{ "\t" }
+SKIP : 	{ "\n" | "\r" | "\r\n" }
+
+TOKEN	:	{ < PROC		:	"proc"                      > }
+TOKEN	:	{ < END			:	"end"                       > }
+TOKEN 	: 	{ < MAKE 		: 	"make"                      > }
+TOKEN	:	{ < VARNAME		:	<COLON><ID>                 > }
+TOKEN	:  	{ < RPT			:	"rpt"                       > }
+TOKEN	:  	{ < RT			:	"rt"                        > }
+TOKEN	:	{ < FD			:	"fd"                        > }
+TOKEN	:	{ < ID          :	(<ALPHA>)+                  > }
+
+TOKEN   :       { < DECPOINT            :   "."                             > }
+TOKEN   :       { < PLUS                :   "+"                             > }
+TOKEN   :       { < MINUS               :   "-"                             > }
+TOKEN   :       { < TIMES               :   "*"                             > }
+TOKEN   :       { < DIVIDE              :   "/"                             > }
+TOKEN   :       { < COLON               :   ":"                             > }
+TOKEN   :       { < COMMA               :   ","                             > }
+
+TOKEN   :       { < LBRACKET      	:   "("                                 > }
+TOKEN   :       { < RBRACKET      	:   ")"                                 > }
+TOKEN   :       { < LSQR        	:   "["                                 > }
+TOKEN   :       { < RSQR        	:   "]"                                 > }
+
+TOKEN   :       { < NUMBER      	:   (<DECPOINT>(<DIGIT>)+)    |    ((<DIGIT>)+(<DECPOINT>(<DIGIT>)+)?)     > }
+TOKEN   :       { < DIGIT       	:   "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"   > }
+TOKEN	:		{ < ALPHA			:	(["a"-"z"] | ["A"-"Z"])            > }
+
+ProgramNode start() #ProgramNode : {}
+{
+    statement_list()
+    <EOF>
+    {
+       
+        return jjtThis;
+    }
+}
+void expression()#ExpressionNode : {}
+{
+    multiplicativeExpression() ( plusexpression()   |   minusexpression()  )*
+}
+void plusexpression()#PlusExpressionNode(2):{}
+{
+    <PLUS>multiplicativeExpression()
+}
+void minusexpression()#MinusExpressionNode(2):{}
+{
+    <MINUS>multiplicativeExpression()
+}
+void multiplicativeExpression(): {}
+{
+    unaryExpression() (    timesterm()    |    divterm()      )*
+}
+void timesterm()#TimesExpressionNode(2):{}
+{
+    (<TIMES> unaryExpression()  )
+}
+void divterm()#DivideExpressionNode(2):{}
+{
+    (<DIVIDE> unaryExpression() )
+}
+void unaryExpression(): {}
+{
+        <MINUS> numberExpression()#NegateExpressionNode
+        |
+	numberExpression()
+}
+void numberExpression():{}
+{
+    varname()
+    |
+    number()
+    |
+    <LBRACKET> expression() <RBRACKET>
+}
+void varname()#VariableValueNode : {Token t;}{
+    t = <VARNAME>
+        {
+            jjtThis.addToData("name",t.image);
+        }
+}
+void number()#NumberNode : {Token t; Double d;}
+{
+    t=<NUMBER>
+        {
+            d = Double.parseDouble(t.image);
+            jjtThis.addToData("value",new Double(d));
+        }
+}
+void fndefine_statement()#FnDefineNode : {}
+{
+    <PROC>
+   (fn_name()   <LBRACKET> ( var_list()  )? <RBRACKET> )
+   inside_fn_statement_list()
+    <END>
+}
+void var_list()#VarListNode:{}
+{
+   varname() (<COMMA> varname() )*
+}
+void statement_list()#StatementListNode:{}
+{
+    ( statement() )*
+}
+void inside_fn_statement_list()#FnStatementListNode:{}
+{
+      (  inside_fn_statement()  )*
+}
+void inside_fn_statement():{}
+{
+   fncall_statement() | make_statement() | fd_statement() |  rt_statement() | rpt_statement()
+}
+void statement():{}
+{
+   inside_fn_statement() | fndefine_statement()
+}
+void rpt_statement()#RptStatementNode:{}
+{
+    <RPT> expression() <LSQR> inside_fn_statement_list() <RSQR>
+}
+void fncall_statement()#FnCallNode:{}
+{
+      fn_name()<LBRACKET> (  expression_list()   )?  <RBRACKET> 
+}
+void expression_list()#ExpressionListNode:{}
+{
+    expression() (<COMMA>  expression()  )* 
+}
+void fn_name()#FnNameNode:{Token t;}
+{
+    t=<ID>
+    {jjtThis.addToData("name",t.image);}
+}
+void fd_statement()#FdStatementNode:{}
+{
+    <FD>expression()
+}
+void rt_statement()#RtStatementNode:{}
+{
+    <RT>expression()
+}
+void make_statement()#MakeStatementNode:{}
+{
+    <MAKE>
+    vardefn()
+    expression()
+}
+void vardefn()#VariableDefnNode : {Token t;}{
+    t = <VARNAME>
+        {   
+            jjtThis.addToData("name",t.image);
+        }
+}

@@ -1,0 +1,6 @@
+make :a (6 - - 5)
+make :b :a * 2
+make :c :b * (:a -1) + 11/:a
+fd :a
+rt :b
+fd :c

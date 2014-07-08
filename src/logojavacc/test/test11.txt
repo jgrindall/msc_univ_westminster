@@ -1,0 +1,17 @@
+make :a 1
+make :b -2
+proc procA()
+  make :a 7
+  fd :a
+  make :a :a +1
+end
+proc procB(:in)
+   make :b :b*:b
+   fd :a*:b
+   make :b :in
+end
+rt :a  rt :b
+procA()
+rt :a  rt :b
+procB(:a)
+rt :a  rt :b

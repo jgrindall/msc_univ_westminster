@@ -1,0 +1,4 @@
+proc procName()
+  procName()
+end
+procName()

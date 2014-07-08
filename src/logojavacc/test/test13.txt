@@ -1,0 +1,6 @@
+proc procA(:in)
+  fd :in
+   make :in :in -1
+   procA(:in)
+end
+procA(6)

@@ -1,0 +1,4 @@
+proc make(:a)
+  fd :a
+end
+make(10)

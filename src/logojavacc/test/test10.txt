@@ -1,0 +1,15 @@
+proc procA()
+end
+proc procB()
+fd 10
+end
+proc procC(:a)
+fd :a +1
+end
+proc procD(:a, :b, :c)
+fd :a +1  rt :b   fd  :b*:c
+end
+procA()
+procB()
+procC(40)
+procD(20, 5 , 4)

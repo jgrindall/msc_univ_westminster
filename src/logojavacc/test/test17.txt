@@ -1,0 +1,3 @@
+proc procA()
+end
+procA(:1)

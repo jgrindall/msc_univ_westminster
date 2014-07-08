@@ -1,0 +1,7 @@
+make :a 4
+proc loop(:a)
+  rpt :a [fd :a]
+  make :a :a -1
+   loop(:a)
+end
+rpt :a [ loop(:a) ]
